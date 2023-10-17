@@ -23,29 +23,32 @@ public class Main {
             while(true) {
 
                 // prompt for random or custom quote
-                int randomOrCustomQuoteStatus = randomOrCustomQuoteMenu();
-                switch(randomOrCustomQuoteStatus) {
-                    case 1:
+                char randomOrCustomQuoteCommand = randomOrCustomQuoteMenu();
+                switch(randomOrCustomQuoteCommand) {
+                    case 'Y':
                         int randomQuoteIndex = getRandomInclusive(1, 10);
                         System.out.println(famousQuotes[randomQuoteIndex] + "\n");
                         break;
-                    case 0:
+                    case 'N':
                         System.out.println();
                         customQuoteMenu();
                         break;
-                    case -1:
+                    default:
+                        System.out.println("\nSorry, could not understand that\n");
                         randomOrCustomQuoteMenu();
                 }
 
                 //prompts user if they want another name
-                int statusOfAnotherQuoteMenu = promptAnotherQuoteMenu();
-                switch(statusOfAnotherQuoteMenu) {
-                    case 1:
+                char anotherQuoteMenuCommand = promptAnotherQuoteMenu();
+                switch(anotherQuoteMenuCommand) {
+                    case 'Y':
                         System.out.println();
                         break;
-                    case 0:
+                    case 'N':
+                        System.out.println("Have a great day!");
                         return;
-                    case -1:
+                    default:
+                        System.out.println("\nSorry, could not understand that\n");
                         promptAnotherQuoteMenu();
                 }
             }
@@ -54,17 +57,9 @@ public class Main {
         }
     }
 
-    public static int randomOrCustomQuoteMenu() {
+    public static char randomOrCustomQuoteMenu() {
         char userWantsRandomQuotes = getCharInput("Would you like a random quote?\nType yes or no: ");
-        switch(userWantsRandomQuotes) {
-            case 'Y':
-                return 1;
-            case 'N':
-                return 0;
-            default:
-                System.out.println("\nSorry, could not understand that\n");
-                return -1;
-        }
+        return userWantsRandomQuotes;
     }
 
     public static void customQuoteMenu() {
@@ -72,18 +67,9 @@ public class Main {
         System.out.println(famousQuotes[userNumber] + "\n");
     }
 
-    public static int promptAnotherQuoteMenu() {
+    public static char promptAnotherQuoteMenu() {
         char continueCommand = getCharInput("Would you like to see another quote?\nType yes or no: ");
-        switch(continueCommand) {
-            case 'Y':
-                return 1;
-            case 'N':
-                System.out.println("Have a great day!");
-                return 0;
-            default:
-                System.out.println("\nSorry, could not understand that\n");
-                return -1;
-        }
+        return continueCommand;
     }
 
     public static int getRandomInclusive(int min, int max) {
