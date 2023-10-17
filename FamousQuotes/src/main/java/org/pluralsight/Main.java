@@ -1,5 +1,7 @@
 package org.pluralsight;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         String[] famousQuotes = {
@@ -14,5 +16,16 @@ public class Main {
                 "With the new day comes new strength and new thoughts.",
                 "If you're going through hell, keep going."
         };
+
+        int userNumber = geIntInput("Select a number between 1 and 10 for your quote\nType in number: ") - 1;
+        System.out.println(famousQuotes[userNumber]);
+    }
+
+    public static int geIntInput(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(prompt);
+        int input = Integer.parseInt(scanner.next());
+        scanner.nextLine();
+        return input;
     }
 }
