@@ -21,22 +21,35 @@ public class Main {
         try {
             while(true) {
                 int userNumber = geIntInput("Select a number between 1 and 10 for your quote\nType in number: ") - 1;
-                System.out.println(famousQuotes[userNumber]);
+                System.out.println(famousQuotes[userNumber] + "\n");
 
-                char continueCommand = getCharInput("Would you like to see another quote?\nType yes or no: ");
-                switch (continueCommand) {
-                    case 'Y':
-                        System.out.println("Here is another quote");
+                int statusOfAnotherQuoteMenu = promptAnotherQuoteMenu();
+                switch(statusOfAnotherQuoteMenu) {
+                    case 1:
+                        System.out.println("\n");
                         break;
-                    case 'N':
-                        System.out.println("Have a great day!");
+                    case 0:
                         return;
-                    default:
-                        System.out.println("Sorry, could not understand that. Please type: yes or no");
+                    case -1:
+                        promptAnotherQuoteMenu();
                 }
             }
         } catch(ArrayIndexOutOfBoundsException e) {
             System.out.println("Oops, looks like you entered a number not in between 1 and 10!");
+        }
+    }
+
+    public static int promptAnotherQuoteMenu() {
+        char continueCommand = getCharInput("Would you like to see another quote?\nType yes or no: ");
+        switch(continueCommand) {
+            case 'Y':
+                return 1;
+            case 'N':
+                System.out.println("Have a great day!");
+                return 0;
+            default:
+                System.out.println("\nSorry, could not understand that\n");
+                return -1;
         }
     }
 
