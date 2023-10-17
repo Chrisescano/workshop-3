@@ -3,30 +3,45 @@ package org.pluralsight;
 import java.util.Scanner;
 
 public class Main {
+    static String[] famousQuotes = {
+            "Excellence is not being the best. It is doing your best",
+            "Life is a journey, not a destination",
+            "Life isn't about finding yourself. Life is about creating yourself",
+            "Don't look back. You're not going that way.",
+            "Life is 10% what happens to you and 90% how you react to it.",
+            "Ever tried. Ever failed. No matter. Try again. Fail again. Fail better.",
+            "Quality is not an act, it is a habit.",
+            "Good, better, best. Never let it rest. 'Til your good is better and your better is best.",
+            "With the new day comes new strength and new thoughts.",
+            "If you're going through hell, keep going."
+    };
     public static void main(String[] args) {
-        String[] famousQuotes = {
-                "Excellence is not being the best. It is doing your best",
-                "Life is a journey, not a destination",
-                "Life isn't about finding yourself. Life is about creating yourself",
-                "Don't look back. You're not going that way.",
-                "Life is 10% what happens to you and 90% how you react to it.",
-                "Ever tried. Ever failed. No matter. Try again. Fail again. Fail better.",
-                "Quality is not an act, it is a habit.",
-                "Good, better, best. Never let it rest. 'Til your good is better and your better is best.",
-                "With the new day comes new strength and new thoughts.",
-                "If you're going through hell, keep going."
-        };
-
 
         try {
-            while(true) {
-                int userNumber = geIntInput("Select a number between 1 and 10 for your quote\nType in number: ") - 1;
-                System.out.println(famousQuotes[userNumber] + "\n");
+            System.out.println("Welcome to your daily dose of inspiration!"); //welcome prompt
 
+            while(true) {
+
+                // prompt for random or custom quote
+                int randomOrCustomQuoteStatus = randomOrCustomQuoteMenu();
+                switch(randomOrCustomQuoteStatus) {
+                    case 1:
+                        int randomQuoteIndex = getRandomInclusive(1, 10);
+                        System.out.println(famousQuotes[randomQuoteIndex] + "\n");
+                        break;
+                    case 0:
+                        System.out.println();
+                        customQuoteMenu();
+                        break;
+                    case -1:
+                        randomOrCustomQuoteMenu();
+                }
+
+                //prompts user if they want another name
                 int statusOfAnotherQuoteMenu = promptAnotherQuoteMenu();
                 switch(statusOfAnotherQuoteMenu) {
                     case 1:
-                        System.out.println("\n");
+                        System.out.println();
                         break;
                     case 0:
                         return;
@@ -37,6 +52,24 @@ public class Main {
         } catch(ArrayIndexOutOfBoundsException e) {
             System.out.println("Oops, looks like you entered a number not in between 1 and 10!");
         }
+    }
+
+    public static int randomOrCustomQuoteMenu() {
+        char userWantsRandomQuotes = getCharInput("Would you like a random quote?\nType yes or no: ");
+        switch(userWantsRandomQuotes) {
+            case 'Y':
+                return 1;
+            case 'N':
+                return 0;
+            default:
+                System.out.println("\nSorry, could not understand that\n");
+                return -1;
+        }
+    }
+
+    public static void customQuoteMenu() {
+        int userNumber = geIntInput("Select a number between 1 and 10 for your quote\nType in number: ") - 1;
+        System.out.println(famousQuotes[userNumber] + "\n");
     }
 
     public static int promptAnotherQuoteMenu() {
@@ -51,6 +84,10 @@ public class Main {
                 System.out.println("\nSorry, could not understand that\n");
                 return -1;
         }
+    }
+
+    public static int getRandomInclusive(int min, int max) {
+        return (int)((Math.random() * (max - min + 1)) + min);
     }
 
     public static int geIntInput(String prompt) {
