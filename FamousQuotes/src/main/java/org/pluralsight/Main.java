@@ -19,8 +19,22 @@ public class Main {
 
 
         try {
-            int userNumber = geIntInput("Select a number between 1 and 10 for your quote\nType in number: ") - 1;
-            System.out.println(famousQuotes[userNumber]);
+            while(true) {
+                int userNumber = geIntInput("Select a number between 1 and 10 for your quote\nType in number: ") - 1;
+                System.out.println(famousQuotes[userNumber]);
+
+                char continueCommand = getCharInput("Would you like to see another quote?\nType yes or no: ");
+                switch (continueCommand) {
+                    case 'Y':
+                        System.out.println("Here is another quote");
+                        break;
+                    case 'N':
+                        System.out.println("Have a great day!");
+                        return;
+                    default:
+                        System.out.println("Sorry, could not understand that. Please type: yes or no");
+                }
+            }
         } catch(ArrayIndexOutOfBoundsException e) {
             System.out.println("Oops, looks like you entered a number not in between 1 and 10!");
         }
@@ -30,6 +44,14 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.print(prompt);
         int input = Integer.parseInt(scanner.next());
+        scanner.nextLine();
+        return input;
+    }
+
+    public static char getCharInput(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(prompt);
+        char input = scanner.next().toUpperCase().charAt(0);
         scanner.nextLine();
         return input;
     }
