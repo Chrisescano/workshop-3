@@ -1,37 +1,94 @@
 package org.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        //java io.FileNotFoundException
-        BufferedReader bufferedReader = null;
+        Scanner scanner = new Scanner(System.in);
 
-        //try and get the file
-        try {
-            bufferedReader = new BufferedReader(new FileReader("employees.csv"));
+        String fileToProcess = getStringInput(scanner, "Enter the name of the employee file to process: ");
+        String fileToCreate = getStringInput(scanner, "Enter the name of the payroll file to create: ");
 
-            //read from the file
-            String fileLine = bufferedReader.readLine(); //reads the first line of csv file
-            while ((fileLine = bufferedReader.readLine()) != null) {
-                String[] tokens = fileLine.split("\\|");
-                Employee employee = new Employee(
-                        tokens[1],
-                        Integer.parseInt(tokens[0]),
-                        Double.parseDouble(tokens[2]),
-                        Double.parseDouble(tokens[3])
-                );
+        String fileContents = readFromFile(fileToProcess);
+        String[] employeesTokens = fileContents.split("\n");
+        Employee[] employees = createEmployeeObjects(employeesTokens);
 
-                System.out.printf("ID: %d  Name: %-20s  GrossPay: $%.2f\n", employee.getEmployeeID(), employee.getName(), employee.getGrossPay());
-
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Oops, looks like the file does not exist!");
-        } catch (IOException e) {
-            System.out.println("Oops, could not read the file!");
+        //formats format of file based on extension
+        String fileHeader = "", fileTail = "", stringFormat = "";
+        switch(fileToCreate.substring(fileToCreate.indexOf('.'))) {
+            case ".csv":
+                fileHeader = "id|name|gross pay\n";
+                fileTail = "%d|%s|%.2f";
+                stringFormat = "%d|%s|%.2f\n";
+                break;
+            case ".json":
+                fileHeader = "[\n";
+                fileTail = "\t{ \"id\" : %d, \"name\" : %s, \"grossPay\" : %.2f }\n]";
+                stringFormat = "\t{ \"id\" : %d, \"name\" : %s, \"grossPay\" : %.2f },\n";
         }
+
+        writeToFile(fileToCreate, fileHeader, fileTail, stringFormat, employees);
+    }
+
+    public static String readFromFile(String filePath) {
+        String fileContents = "";
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+
+            String fileLine = "";
+            bufferedReader.readLine(); //skips first line from csv that is header
+            while((fileLine = bufferedReader.readLine()) != null) {
+                fileContents += fileLine + "\n";
+            }
+        } catch(IOException e) {
+            System.out.println("Oops, something went wrong");
+            e.printStackTrace();
+        }
+
+        return fileContents;
+    }
+
+    public static void writeToFile(String filePath, String fileHeader, String fileTail, String stringFormat, Employee[] employees) {
+        int lastIndex = employees.length - 1;
+
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath));
+
+            bufferedWriter.write(fileHeader);
+            for(int i = 0; i < employees.length - 1; i++) {
+                String fileLine = String.format(stringFormat, employees[i].getEmployeeID(), employees[i].getName(), employees[i].getGrossPay());
+                bufferedWriter.write(fileLine);
+            }
+            String fileLine = String.format(fileTail, employees[lastIndex].getEmployeeID(), employees[lastIndex].getName(), employees[lastIndex].getGrossPay());
+            bufferedWriter.write(fileLine);
+
+            bufferedWriter.close();
+        } catch (IOException e) {
+            System.out.println("Oops, something went wrong");
+            e.printStackTrace();
+        }
+    }
+
+    public static Employee[] createEmployeeObjects(String[] employeesData) {
+        Employee[] employees = new Employee[employeesData.length];
+
+        for(int i = 0; i < employeesData.length; i++) {
+            String[] tokens = employeesData[i].split("\\|");
+            employees[i] = new Employee(
+                    tokens[1],
+                    Integer.parseInt(tokens[0]),
+                    Double.parseDouble(tokens[2]),
+                    Double.parseDouble(tokens[3])
+            );
+        }
+        return employees;
+    }
+
+    public static String getStringInput(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        String input = scanner.nextLine();
+        return input;
     }
 }
