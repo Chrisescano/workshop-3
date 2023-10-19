@@ -23,7 +23,7 @@ public class Main {
                         Integer.parseInt(tokens[0]),
                         Double.parseDouble(tokens[2]),
                         Double.parseDouble(tokens[3])
-                        );
+                );
 
                 System.out.printf("ID: %d  Name: %-20s  GrossPay: $%.2f\n", employee.getEmployeeID(), employee.getName(), employee.getGrossPay());
 
