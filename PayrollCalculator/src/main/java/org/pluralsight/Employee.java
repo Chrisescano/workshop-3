@@ -46,4 +46,11 @@ public class Employee {
     public void setName(String name) {
         this.name = name;
     }
+
+    /*-----Override-----*/
+
+    @Override
+    public String toString() {
+        return "Employee{ID: "+ employeeID +" Name: " + name + " HoursWorked: " + hoursWorked + " PayRate: " + payRate + "}";
+    }
 }
