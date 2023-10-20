@@ -23,7 +23,7 @@ public class FormatDates {
         System.out.println(timeRightNow.format(timeFormatter));
 
         //dayofweek, month day, year  time
-        timeFormatter = DateTimeFormatter.ofPattern("EEEE, MM dd, yyyy");
+        timeFormatter = DateTimeFormatter.ofPattern("EEEE, MM dd, yyyy  HH:mm");
         System.out.println(timeRightNow.format(timeFormatter));
 
         //challenge
